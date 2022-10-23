@@ -6,7 +6,7 @@ import App from './_app'
 
 function Appointments({ pageProps }) {
   return (
-    <h1> what is gods name</h1>
+    <h1>Appointments </h1>
     
 
   )
