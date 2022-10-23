@@ -11,7 +11,7 @@ function App({
     <SessionProvider session={session}>
       <Nav {...pageProps} />
       <LoginButton {...pageProps} />
-      <Component {...pageProps} />
+      <Component {...pageProps}/>
     </SessionProvider>
   )
 }
