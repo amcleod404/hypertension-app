@@ -10,7 +10,6 @@ function App({
   return (
     <SessionProvider session={session}>
       <Nav {...pageProps} />
-      <LoginButton {...pageProps} />
       <Component {...pageProps} />
     </SessionProvider>
   )

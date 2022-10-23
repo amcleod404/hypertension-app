@@ -24,8 +24,9 @@ export default function Nav() {
         </div>
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex flex-shrink-0 items-center">
-            <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"></img>
-            <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"></img>
+            {/* <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"></img>
+            <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"></img> */}
+            <img src="logo-color.svg" class="block h-8 w-auto"></img>
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
@@ -45,12 +46,6 @@ export default function Nav() {
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <div class="relative ml-3" style={{display:  session ? "none" : "block" }}>
-            <Link href="api/auth/signup">
-            <a class="text-white px-3 py-2 rounded-md text-sm font-medium">Sign up
-            </a>
-            </Link>
-          </div>
           <div class="relative ml-3">
             <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
             <a class="text-white px-3 py-2 rounded-md text-sm font-medium">{session ? "Sign Out" : "Sign in"}
