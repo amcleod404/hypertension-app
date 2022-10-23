@@ -1,14 +1,10 @@
 import Link from "next/link"
 import { useSession, signIn, signOut } from "next-auth/react"
+import { useState, setState } from "react"
 
 export default function Nav() {
     const { data: session } = useSession()
-    var displayText
-    if (session) {
-        displayText = true
-    } else {
-        displayText = false
-    }
+    const [highlight, setHighlight] = useState("Home")
     return (
       <>
         <nav class="bg-gray-800">
@@ -33,20 +29,31 @@ export default function Nav() {
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>
-  
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Team</a>
-  
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-  
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
+                <Link href="/">
+                    <a onClick={() => setHighlight("Home")} class={highlight == "Home" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Home</a>
+                </Link>
+                <Link href="/appointments">
+                <a onClick={() => setHighlight("Appointments")} class={highlight == "Appointments" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Appointments</a>
+                </Link>
+                <Link href="/training">
+                <a onClick={() => setHighlight("Training")} class={highlight == "Training" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Training</a>
+                </Link>
+                <Link href="/diet">
+                <a onClick={() => setHighlight("Diet")} class={highlight == "Diet" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Diet</a>
+                </Link>
             </div>
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        <div class="relative ml-3" style={{display:  session ? "none" : "block" }}>
+            <Link href="api/auth/signup">
+            <a class="text-white px-3 py-2 rounded-md text-sm font-medium">Sign up
+            </a>
+            </Link>
+          </div>
           <div class="relative ml-3">
-            <Link href={displayText ? "/api/auth/signout" : "/api/auth/signin"}>
-            <a class="text-white px-3 py-2 rounded-md text-sm font-medium">{displayText ? "Sign Out" : "Sign in"}
+            <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
+            <a class="text-white px-3 py-2 rounded-md text-sm font-medium">{session ? "Sign Out" : "Sign in"}
             </a>
             </Link>
           </div>
