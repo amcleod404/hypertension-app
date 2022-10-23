@@ -1,19 +1,18 @@
-import "../styles/globals.css"
+
 import LoginButton from '../components/LoginButton'
 import Nav from '../components/Nav'
 import { SessionProvider } from "next-auth/react"
+import App from './_app'
 
-function App({
+function Appointments({
   Component,
   pageProps: { session, ...pageProps },
 }) {
   return (
-    <SessionProvider session={session}>
-        <Nav {...pageProps}></Nav>
-        <LoginButton {...pageProps} />
-    </SessionProvider>
+    <h1> what is gods name</h1>
+    
 
   )
 }
 
-export default App
+export default Appointments
