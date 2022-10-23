@@ -46,6 +46,10 @@ export default function Nav() {
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        <div class="relative ml-3" style={{display:  session ? "block" : "none" }}>
+        <p class="text-white px-3 py-2 rounded-md text-sm font-medium">{session ? session.user.name : ""}</p>
+        </div>
+        <img src={session && session.user.image} style={{display: session ? "block" : "none", height: 30, width: 30, borderRadius: 50}}/>
           <div class="relative ml-3">
             <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
             <a class="text-white px-3 py-2 rounded-md text-sm font-medium">{session ? "Sign Out" : "Sign in"}
