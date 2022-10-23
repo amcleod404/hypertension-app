@@ -1,7 +1,7 @@
 import "../styles/globals.css"
-import LoginButton from '../components/LoginButton'
-import Nav from '../components/Nav'
 import { SessionProvider } from "next-auth/react"
+import Nav from "../components/Nav"
+import LoginButton from "../components/LoginButton"
 
 function App({
   Component,
@@ -9,10 +9,10 @@ function App({
 }) {
   return (
     <SessionProvider session={session}>
-        <Nav {...pageProps}></Nav>
-        <LoginButton {...pageProps} />
+      <Nav {...pageProps} />
+      <LoginButton {...pageProps} />
+      <Component {...pageProps} />
     </SessionProvider>
-
   )
 }
 

@@ -1,15 +1,15 @@
-
 import LoginButton from '../components/LoginButton'
 import Nav from '../components/Nav'
 import { SessionProvider } from "next-auth/react"
 import App from './_app'
+import { Component } from 'react'
 
-function Appointments({ pageProps }) {
+function IndexPage({ pageProps }) {
   return (
-    <h1> what is gods name</h1>
-    
-
+    <>
+        {/* <Component {...pageProps} /> */}
+    </>
   )
 }
 
-export default Appointments
+export default IndexPage
