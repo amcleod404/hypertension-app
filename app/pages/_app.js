@@ -1,7 +1,7 @@
 import "../styles/globals.css"
 import { SessionProvider } from "next-auth/react"
 import Nav from "../components/Nav"
-import LoginButton from "../components/LoginButton"
+import NotificationCard from "../components/NotificationCard"
 
 function App({
   Component,
@@ -11,6 +11,7 @@ function App({
     <SessionProvider session={session}>
       <Nav {...pageProps} />
       <Component {...pageProps} />
+      <NotificationCard {...pageProps} />
     </SessionProvider>
   )
 }
