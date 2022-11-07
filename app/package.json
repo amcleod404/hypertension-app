@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "flowbite": "^1.5.3",
+    "flowbite-datepicker": "^1.2.2",
     "mongodb": "^4.11.0",
     "next": "12.3.1",
     "next-auth": "^4.14.0",
