@@ -4,17 +4,33 @@ import Nav from '../components/Nav'
 import { SessionProvider } from "next-auth/react"
 import App from './_app'
 import Script from 'next/script'
+import { useSession, signIn, signOut } from "next-auth/react"
+import { useState, setState } from "react"
+import { getSession } from 'next-auth/react'
 
-function Appointments({ pageProps }) {
+export default function Appointments({ appointments }) {
+  const { data: session } = useSession()
   const handleClick = async (e) => {
     e.preventDefault()
     const visitType = document.getElementById('visit-type').value
-    const appointmentDate = Date(document.getElementById('appointment-date').value)
-    fetch(`/api/appointments?name=ian_boldea&date=${appointmentDate}&visit=${visitType}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-      })
+    const appointmentDate = document.getElementById('appointment-date').value
+    console.log(appointmentDate)
+    fetch(
+      `/api/appointments`,
+      {
+        body: JSON.stringify({date: appointmentDate, visit: visitType, name: session.user.name}),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST'
+      }
+
+    ).then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+      window.location.reload()
+    })
+      
   }
   return (
     <>
@@ -26,19 +42,10 @@ function Appointments({ pageProps }) {
             </div>
             <div class="md:7/12 lg:w-6/12">
               <h2 class="text-2xl text-gray-900 font-bold md:text-4xl">Upcoming Appointments</h2>
-              <p class="mt-6 text-gray-600">Hypertension is an official medical term to denote a condition where a patient has high blood pressure. This app aims to assist those with hypertension by providing ways to manage the disease. This includes ensuring that doctor and lab appointments are scheduled and kept, exercise tracking, diet tracking, and staying informed about the disease. </p>
-              <p class="mt-4 mb-4 text-gray-600"> To learn more about the disease, please visit the following links:</p>
-              <ul class="ml-4 list-disc">
-                <li>
-                  <a href="https://www.cdc.gov/bloodpressure/about.htm#:~:text=High%20blood%20pressure%2C%20also%20called,blood%20pressure%20(or%20hypertension)." class="no-underline hover:underline">CDC</a>
-                </li>
-                <li>
-                  <a href="https://www.mayoclinic.org/diseases-conditions/high-blood-pressure/symptoms-causes/syc-20373410" class="no-underline hover:underline">Mayo Clinic</a>
-                </li>
-                <li>
-                  <a href="https://www.heart.org/en/health-topics/high-blood-pressure" class="no-underline hover:underline">Heart.org</a>
-                </li>
-
+              <ul class="ml-4 list-disc mt-2">
+              {appointments.map((appointment) => (
+                new Date(appointment.date) > Date.now() && <li><strong>{appointment.visit}: </strong>{appointment.date}</li>
+              ))}
               </ul>
             </div>
           </div>
@@ -50,7 +57,7 @@ function Appointments({ pageProps }) {
             <div class="w-full">
               <h2 class="text-2xl text-gray-900 font-bold md:text-4xl">Let's schedule a new appointment!</h2>
               <form class="w-full max-w-lg mt-6 flex flex-row gap-3">
-                <input type="date" id="appointment-date" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" class="px-4 py-2 rounded shadow leading-tight"></input>
+                <input type="date" id="appointment-date" name="trip-start" class="px-4 py-2 rounded shadow leading-tight"></input>
                 <div class="inline-block relative w-64">
                   <select id="visit-type" class="block appearance-none w-full bg-white hover:border-gray-500 px-4 py-3 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                     <option>Regular Checkup</option>
@@ -72,4 +79,29 @@ function Appointments({ pageProps }) {
   )
 }
 
-export default Appointments
+export async function getServerSideProps(ctx) {
+  try {
+    const { MongoClient, ServerApiVersion } = require('mongodb')
+    const uri = "mongodb+srv://ianfboldea:asdfjkl;11@hypertension-cluster.vkdattq.mongodb.net/?retryWrites=true&w=majority"
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
+    const db = client.db("auth")
+
+    const session = await getSession(ctx)
+
+    const user = await db.collection("users").findOne({ name: session.user.name })
+ 
+    const appointments = await db
+        .collection("appointments")
+        .find({ user_id: user.id })
+        .sort({ date: 1 })
+        .limit(10)
+        .toArray();
+
+    console.log(user, appointments)
+    return {
+      props: { appointments: JSON.parse(JSON.stringify(appointments)) },
+    };
+  } catch (e) {
+      console.error(e);
+  }
+}
