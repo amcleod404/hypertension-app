@@ -4,8 +4,12 @@ import { SessionProvider } from "next-auth/react"
 import App from './_app'
 import { Component } from 'react'
 import Image from "next"
+import NotificationCard from "../components/NotificationCard"
+import { useSession, signIn, signOut } from "next-auth/react"
+import { useState, setState } from "react"
+import { getSession } from 'next-auth/react'
 
-function IndexPage({ pageProps }) {
+export default function IndexPage({ appointments }) {
   return (
     <>
         <div class="py-16 bg-white">  
@@ -61,8 +65,32 @@ function IndexPage({ pageProps }) {
       </div>
   </div>
 </div>
+<NotificationCard appointments={appointments} />
     </>
   )
 }
 
-export default IndexPage
+export async function getServerSideProps(ctx) {
+  try {
+    const { MongoClient, ServerApiVersion } = require('mongodb')
+    const uri = "mongodb+srv://ianfboldea:asdfjkl;11@hypertension-cluster.vkdattq.mongodb.net/?retryWrites=true&w=majority"
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
+    const db = client.db("auth")
+
+    const session = await getSession(ctx)
+
+    const user = await db.collection("users").findOne({ name: session.user.name })
+ 
+    const appointments = await db
+        .collection("appointments")
+        .find({ user_id: user.id })
+        .sort({ date: 1 })
+        .limit(10)
+        .toArray();
+    return {
+      props: { appointments: JSON.parse(JSON.stringify(appointments)) },
+    };
+  } catch (e) {
+      console.error(e);
+  }
+}

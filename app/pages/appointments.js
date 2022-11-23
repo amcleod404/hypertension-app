@@ -30,7 +30,6 @@ export default function Appointments({ appointments }) {
       console.log(data)
       window.location.reload()
     })
-      
   }
   return (
     <>
@@ -97,7 +96,6 @@ export async function getServerSideProps(ctx) {
         .limit(10)
         .toArray();
 
-    console.log(user, appointments)
     return {
       props: { appointments: JSON.parse(JSON.stringify(appointments)) },
     };
