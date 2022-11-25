@@ -11,13 +11,14 @@ export default function Diet({ diet }) {
   const { data: session } = useSession()
   const handleClick = async (e) => {
     e.preventDefault()
-    const visitType = document.getElementById('visit-type').value
-    const appointmentDate = document.getElementById('appointment-date').value
-    console.log(appointmentDate)
+    const foodName = document.getElementById('food-name').value
+    const date = document.getElementById('training-date').value
+    const quantity = parseInt(document.getElementById('food-quantity').value)
+    const cals = parseInt(document.getElementById('cals-per-item').value) * quantity
     fetch(
-      `/api/appointments`,
+      `/api/diet`,
       {
-        body: JSON.stringify({date: appointmentDate, visit: visitType, name: session.user.name}),
+        body: JSON.stringify({date: date, foodName: foodName, name: session.user.name, quantity: quantity, cals: cals}),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -54,19 +55,10 @@ export default function Diet({ diet }) {
         </ul>
       </div>
       <form class="w-full max-w-xl mt-6 flex flex-row gap-3">
-        <div class="inline-block relative w-36">
-        <select id="training-type" class="block appearance-none w-full bg-white hover:border-gray-500 px-4 py-3 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
-          <option>Running</option>
-          <option>Weight Training</option>
-          <option>Swimming</option>
-        </select>
-        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-        </div>
-        </div>
-        <input type="date" id="training-date" name="trip-start" class="px-4 py-2 rounded shadow leading-tight" required></input>
-        <input type="time" id="training-time" name="training" min="09:00" max="18:00" class="px-4 py-2 rounded shadow leading-tight" required></input>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={e => handleClick(e)}>
+        <input id="food-name" class="block appearance-none w-full bg-white hover:border-gray-500 px-2 py-3 rounded shadow leading-tight focus:outline-none focus:shadow-outline" placeholder="Food name" required></input>
+        <input type="number" id="food-quantity" defaultValue="1" class="px-2 py-2 rounded shadow leading-tight w-16" required></input>
+        <input type="number" id="cals-per-item" name="cals" defaultValue="100" class="px-2 py-2 rounded shadow leading-tight w-16" required></input>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline" type="button" onClick={e => handleClick(e)}>
           Submit
         </button>
       </form>

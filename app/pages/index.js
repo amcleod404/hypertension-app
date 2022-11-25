@@ -78,26 +78,32 @@ export default function IndexPage({ appointments }) {
 }
 
 export async function getServerSideProps(ctx) {
-  try {
-    const { MongoClient, ServerApiVersion } = require('mongodb')
-    const uri = "mongodb+srv://ianfboldea:asdfjkl;11@hypertension-cluster.vkdattq.mongodb.net/?retryWrites=true&w=majority"
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
-    const db = client.db("auth")
-
-    const session = await getSession(ctx)
-
-    const user = await db.collection("users").findOne({ name: session.user.name })
- 
-    const appointments = await db
-        .collection("appointments")
-        .find({ user_id: user.id })
-        .sort({ date: 1 })
-        .limit(10)
-        .toArray();
+  const session = await getSession(ctx)
+  if (session) {
+    try {
+      const { MongoClient, ServerApiVersion } = require('mongodb')
+      const uri = "mongodb+srv://ianfboldea:asdfjkl;11@hypertension-cluster.vkdattq.mongodb.net/?retryWrites=true&w=majority"
+      const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
+      const db = client.db("auth")
+  
+      const user = await db.collection("users").findOne({ name: session.user.name })
+   
+      const appointments = await db
+          .collection("appointments")
+          .find({ user_id: user.id })
+          .sort({ date: 1 })
+          .limit(10)
+          .toArray();
+      return {
+        props: { appointments: JSON.parse(JSON.stringify(appointments)) },
+      };
+    } catch (e) {
+        console.error(e);
+    }
+  }
+  else {
     return {
-      props: { appointments: JSON.parse(JSON.stringify(appointments)) },
-    };
-  } catch (e) {
-      console.error(e);
+      props: { appointments: JSON.parse(JSON.stringify([])) }
+    }
   }
 }
