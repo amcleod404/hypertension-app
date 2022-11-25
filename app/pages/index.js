@@ -8,6 +8,7 @@ import NotificationCard from "../components/NotificationCard"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useState, setState } from "react"
 import { getSession } from 'next-auth/react'
+import Link from 'next/link'
 
 export default function IndexPage({ appointments }) {
   return (
@@ -47,15 +48,21 @@ export default function IndexPage({ appointments }) {
           <h2 class="text-2xl text-gray-900 font-bold md:text-4xl">We're here to help</h2>
           <p class="mt-6 text-gray-600">Living with hypertension can be difficult. To get started with the hypertension assistant, you can begin by logging your appointments, tracking your diet, or recording your exercise. </p>
           <div class="inline-block mt-6">
-          <button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-  Appointments
-</button>
-<button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-  Diet
-</button>
-<button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-  Training
-</button>
+          <Link href="/appointments">
+            <button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+              Appointments
+            </button>
+          </Link>
+          <Link href={"/diet?date="+(new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate()}>
+            <button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+              Diet
+            </button>
+          </Link>
+          <Link href="/training">
+            <button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+              Training
+            </button>
+          </Link>
           </div>
           
         </div>
