@@ -34,15 +34,17 @@ export default function Nav() {
                 <Link href="/">
                     <a onClick={() => setHighlight("/")} class={highlight == "/" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Home</a>
                 </Link>
+                { session ? <>
                 <Link href="/appointments">
                 <a onClick={() => setHighlight("/appointments")} class={highlight == "/appointments" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Appointments</a>
                 </Link>
                 <Link href="/training">
-                <a onClick={() => setHighlight("/training")} class={highlight == "/training" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Training</a>
+                <a onClick={() => setHighlight("/training")} class={highlight == "/training" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Excercise</a>
                 </Link>
-                <Link href={"/diet?date=" + (new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate()}>
+                <Link href={"/diet?date=" + (new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1 > 9 ? (new Date()).getMonth()+1 : '0' + ((new Date()).getMonth()+1) ) + '-' + ((new Date()).getDate() > 9 ? (new Date()).getDate() : '0' + ((new Date()).getDate()) )}>
                 <a onClick={() => setHighlight("/diet")} class={highlight == "/diet" ? "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium": "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" } aria-current="page">Diet</a>
                 </Link>
+                </> : <></> }
             </div>
           </div>
         </div>

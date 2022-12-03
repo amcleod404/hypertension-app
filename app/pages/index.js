@@ -11,6 +11,7 @@ import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 
 export default function IndexPage({ appointments }) {
+  const { data: session } = useSession()
   return (
     <>
         <div class="py-16 bg-white">  
@@ -40,12 +41,14 @@ export default function IndexPage({ appointments }) {
   </div>
 </div>
 
+{session &&
+<>
 <div class="py-16 bg-blue-50">  
   <div class="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
       <div class="space-y-6 md:space-y-0 md:flex md:gap-6 lg:items-center lg:gap-12">
         
         <div class="md:8/12 lg:w-7/12">
-          <h2 class="text-2xl text-gray-900 font-bold md:text-4xl">We're here to help</h2>
+          <h2 class="text-2xl text-gray-900 font-bold md:text-4xl">We&apos;re here to help</h2>
           <p class="mt-6 text-gray-600">Living with hypertension can be difficult. To get started with the hypertension assistant, you can begin by logging your appointments, tracking your diet, or recording your exercise. </p>
           <div class="inline-block mt-6">
           <Link href="/appointments">
@@ -53,14 +56,14 @@ export default function IndexPage({ appointments }) {
               Appointments
             </button>
           </Link>
-          <Link href={"/diet?date="+(new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate()}>
+          <Link href={"/diet?date=" + (new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1 > 9 ? (new Date()).getMonth()+1 : '0' + ((new Date()).getMonth()+1) ) + '-' + ((new Date()).getDate() > 9 ? (new Date()).getDate() : '0' + ((new Date()).getDate()) )}>
             <button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
               Diet
             </button>
           </Link>
           <Link href="/training">
             <button class=" mr-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-              Training
+              Excercise
             </button>
           </Link>
           </div>
@@ -72,7 +75,10 @@ export default function IndexPage({ appointments }) {
       </div>
   </div>
 </div>
-<NotificationCard appointments={appointments} />
+<NotificationCard appointments={appointments} name={session.user.name} />
+</>
+}
+
     </>
   )
 }
